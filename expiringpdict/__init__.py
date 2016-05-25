@@ -33,6 +33,9 @@ class ExpiringDictStore(MutableMapping):
     def __len__(self):
         raise NotImplementedError()
 
+    def _gc(self, force=False):
+        pass
+
     def set_max_age(self, max_age):
         self._max_age = max_age
 
@@ -76,12 +79,12 @@ class ExpiringDictStoreDict(ExpiringDictStore):
     def __len__(self):
         return self._real_storage.__len__()
 
-    def _gc(self):
+    def _gc(self, force=False):
         """ Remove expired key from the dict.
         Use a probability for Garbage Collector to run or not.
         """
         probability = random.randint(0, CONST_GC_MAX)
-        if probability > CONST_GC_PROB:
+        if probability > CONST_GC_PROB and not force:
             return
         logging.info('ExpiringDict Garbage Collector')
         max_date = (arrow.now() - timedelta(seconds=self._max_age))
@@ -150,9 +153,11 @@ class ExpiringDict(object):
         self._store.__delitem__(key)
 
     def __iter__(self):
+        self._store._gc(force=True)
         return self._store.__iter__()
 
     def __len__(self):
+        self._store._gc(force=True)
         return self._store.__len__()
 
     def set_max_age(self, max_age):
