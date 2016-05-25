@@ -1,2 +1,5 @@
+*.py[cod]
+
+# IDE files
 .idea
 *.iml

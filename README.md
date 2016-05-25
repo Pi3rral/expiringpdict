@@ -1,2 +1,2 @@
-# expiringdict
+# expiringpdict
 Python Expiring Dictionary
