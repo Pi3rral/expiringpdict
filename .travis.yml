@@ -1,9 +1,14 @@
 language: python
 python:
 - '2.7'
-# command to install dependencies
 install:
-  - pip install .
-  - pip install -r requirements.txt
-# command to run tests
+- pip install .
+- pip install -r requirements.txt
 script: py.test tests
+deploy:
+  provider: pypi
+  user: pi3rral
+  password:
+    secure: bmYODV3EcWQMJNHYsRWU0WHdti76FVR94q5VGkAb9ByUBFyMjBL0m8eRALugEdBHNH218YBTZqPAk+t/gX1cg2w/j7TbZnQCAcdMlMgqHHF4Lj2v3xoiKEix7hn4jd2ncAD9m3AwsggAmCRkW0+RkJOsPFpjYdTfJ9DyGiFho76+XYO9Ih3W+fyq265X/bZa+E+gVsLiu+MKFzewDzE2PO2+adWlmBo6WlVPN3Pp6p6pd3wF7uPixZHhLpr4NyOrumkDqgJ3M3Jqi59It78uphevhEJF7KekynN8nKrb+Szzacx06cwaJZbW56ggs4fF4vpZVUWA56X1k1eWUOha4J7nLInaFLuLQ8TQWNSmSpjDQX7KT9eRBferldqQTreNL4nUyLfgSRBqtQ3NoGIahQ5UBQSPDA2nxx/+i7Tl7YaRv4evdXX9yuewjZKgq0f97ki84FSNVIvwcRWD9YOislT/7w5Fd9S6PLCYYTQ65R2I1Y5ancTYx1xpdYjIfp21N8a4limf6xQCHYAS3V7ekyVsv5wqG2lyMtH3IlvC9wXVgNHJM/veadLOZb+8CzwVVOAMPoRtHd2FNTp7cpLq7XV1NSKhh8e6WXWBQ6yDLQRTJOevdZc2YQPxFpdqWuD21p8YCAW9QTbZdDOgAgXBH9fd7NeZnuB0vRaC8M2TfQU=
+  on:
+    tags: true
