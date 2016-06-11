@@ -40,11 +40,7 @@ class ExpiringDictStore(MutableMapping):
         self._max_age = max_age
 
     def refresh(self, key):
-        try:
-            tuple_value = self.__getitem__(key)
-            self.__setitem__(key, tuple_value[0])
-        except KeyError:
-            pass
+        raise NotImplementedError()
 
 
 class ExpiringDictStoreDict(ExpiringDictStore):
@@ -78,6 +74,13 @@ class ExpiringDictStoreDict(ExpiringDictStore):
 
     def __len__(self):
         return self._real_storage.__len__()
+
+    def refresh(self, key):
+        try:
+            tuple_value = self.__getitem__(key)
+            self.__setitem__(key, tuple_value[0])
+        except KeyError:
+            pass
 
     def _gc(self, force=False):
         """ Remove expired key from the dict.
@@ -129,6 +132,13 @@ class ExpiringDictStoreRedis(ExpiringDictStore):
 
     def __len__(self):
         return len(self._redis.keys("^%s.*" % self._key_prefix))
+
+    def refresh(self, key):
+        try:
+            value = self.__getitem__(key)
+            self.__setitem__(key, value)
+        except KeyError:
+            pass
 
 
 class ExpiringDict(object):
