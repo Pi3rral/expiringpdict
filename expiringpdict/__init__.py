@@ -147,9 +147,10 @@ class ExpiringDict(object):
     Can store data in a redis server if available. Otherwise, uses a python dict.
     """
 
-    def __init__(self, max_age, redis_hostname=None, redis_port=6379):
+    def __init__(self, max_age, redis_hostname=None, redis_port=6379, redis_key_prefix=None):
         if redis_hostname and redis_port:
-            self._store = ExpiringDictStoreRedis(max_age, redis_hostname=redis_hostname, redis_port=redis_port)
+            self._store = ExpiringDictStoreRedis(max_age, redis_hostname=redis_hostname, redis_port=redis_port,
+                                                 key_prefix=redis_key_prefix)
         else:
             self._store = ExpiringDictStoreDict(max_age)
 
@@ -185,13 +186,8 @@ class ExpiringDict(object):
 
     def refresh(self, key):
         """ Reset TTL to max_age for given key
-        Do not raise KeyError
         """
-        try:
-            tuple_value = self._store.__getitem__(key)
-            self._store.__setitem__(key, tuple_value[0])
-        except KeyError:
-            pass
+        self._store.refresh(key)
 
     def pop(self, key, default=None):
         """ Get item and remove it.
