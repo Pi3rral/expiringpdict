@@ -1,3 +1,2 @@
 arrow
-logging
 redis
