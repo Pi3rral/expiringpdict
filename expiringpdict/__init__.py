@@ -103,13 +103,15 @@ class ExpiringDictStoreRedis(ExpiringDictStore):
     Store datas as key on a redis server.
     """
     def __init__(self, max_age, redis_hostname=None, redis_port=6379,
-                 key_prefix=None, redis_instance=None):
+                 key_prefix=None, redis_instance=None, redis_db=0,
+                 redis_password=None):
         self._max_age = max_age
         self._key_prefix = key_prefix if key_prefix else id(self)
         logging.debug('Creating Redis ExpiringDict with prefix: {}'.format(
             self._key_prefix))
         self._redis = redis_instance if redis_instance \
-            else redis.StrictRedis(host=redis_hostname, port=redis_port)
+            else redis.StrictRedis(host=redis_hostname, port=redis_port,
+                                   db=redis_db, password=redis_password)
 
     def _get_real_key(self, key):
         return str(self._key_prefix) + str(key)
@@ -153,11 +155,12 @@ class ExpiringDict(object):
     """
 
     def __init__(self, max_age, redis_hostname=None, redis_port=6379,
-                 redis_key_prefix=None):
+                 redis_key_prefix=None, redis_db=0, redis_password=None):
         if redis_hostname and redis_port:
             self._store = ExpiringDictStoreRedis(
                 max_age, redis_hostname=redis_hostname, redis_port=redis_port,
-                key_prefix=redis_key_prefix
+                key_prefix=redis_key_prefix, redis_db=redis_db,
+                redis_password=redis_password
             )
         else:
             self._store = ExpiringDictStoreDict(max_age)
