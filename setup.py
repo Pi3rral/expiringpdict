@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
     name='expiringpdict',
     packages=['expiringpdict'],
-    version='1.1.4',
+    version='1.1.5',
     description='A Python Expiring Dictionary',
     author='Pi3rral',
     author_email='pierre.leca@gmail.com',
