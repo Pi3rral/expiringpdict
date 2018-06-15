@@ -157,7 +157,7 @@ class ExpiringDict(object):
 
     def __init__(self, max_age, redis_hostname=None, redis_port=6379,
                  redis_key_prefix=None, redis_url=None):
-        if redis_hostname and redis_port:
+        if redis_url or (redis_hostname and redis_port):
             self._store = ExpiringDictStoreRedis(
                 max_age, redis_hostname=redis_hostname, redis_port=redis_port,
                 key_prefix=redis_key_prefix, redis_url=redis_url
